@@ -15,3 +15,6 @@ DUPLICATES_FOUND="Duplicates found:";
 
 NO_VALID_DIR="The supplied directory is not a valid directory";
 NO_VALID_FILE="The supplied file is not a valid file";
+
+FOUND="Found";
+DELETED="Deleted";

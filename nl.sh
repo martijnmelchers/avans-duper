@@ -15,3 +15,6 @@ DUPLICATES_FOUND="Duplicaten gevonden:";
 
 NO_VALID_DIR="De opgegeven map is geen geldige map.";
 NO_VALID_FILE="Het opgegeven bestand is geen geldig bestand.";
+
+FOUND="Gevonden";
+DELETED="Verwijderd";

@@ -21,11 +21,14 @@ lang="en"
 
 start_datetime=$(date "+%F/%r")
 
-while getopts "nrx:l:" opt; do
+
+usage() {
+    echo "Usage: duper [-l lang]] [-r] [-x [file]] [directory]";
+    exit 1;
+}
+
+while getopts "rx:l:" opt; do
     case $opt in
-    n)
-        echo "n"
-    ;;
     r)
         delete_files=true;
     ;;
@@ -43,7 +46,10 @@ while getopts "nrx:l:" opt; do
         else
             lang="nl";
         fi
+    ;;
 
+    ?)
+        usage
     ;;
     esac
 done
@@ -119,7 +125,7 @@ while read -r file; do
 done < <(find "$1" -type f)
 end_datetime=$(date "+%F/%r")
 
-printf '%s /// %s : found:  %s,   deleted:  %s\n' "$start_datetime" "$end_datetime" "${#duplicates[@]}" "$delete_files_count" >> ~/var/duper.log
+printf '%s /// %s : %s:  %s,  %s:  %s\n' "$start_datetime" "$end_datetime" "$FOUND" "${#duplicates[@]}" "$DELETED" "$delete_files_count" >> ~/var/duper.log
 
 echo $DUPLICATES_FOUND;
 # Print het aantal duplicates
