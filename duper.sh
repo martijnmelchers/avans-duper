@@ -18,6 +18,9 @@ delete_files=false
 
 lang="en"
 
+
+start_datetime=$(date "+%F/%r")
+
 while getopts "nrx:l:" opt; do
     case $opt in
     n)
@@ -27,10 +30,10 @@ while getopts "nrx:l:" opt; do
         delete_files=true;
     ;;
     x)
-        if [[ -e $OPTARG ]] ; then
+        if [[ -f $OPTARG ]] ; then
             ignore_duplicates+=("$OPTARG")
         else
-            echo "Opgegeven bestand(en) zijn niet valide "  
+            echo "Not a valid file."  
             exit 1;
         fi
     ;;
@@ -56,6 +59,10 @@ fi
 # Zorgt dat we de $1 kunnen aanroepen door alle andere dingen weg te shiften.
 shift $((OPTIND-1))
 
+if [[ ! -d "$1" ]] ; then
+    echo "$NO_VALID_DIR"  
+    exit 1;
+fi
 
 array_contains () {
     local seeking=$1; shift
@@ -70,6 +77,9 @@ array_contains () {
 }
 
 echo "$SCANNING_DIR $1";
+
+
+delete_files_count=0;
 
 while read -r file; do
     echo $PROGRESS_START;
@@ -92,6 +102,7 @@ while read -r file; do
         duplicates+=("$file")
          if [[ "$delete_files" = true ]]; then
             rm $file;
+            delete_files_count+=1
             echo $PROGRESS_DELETING;
         fi
 
@@ -106,8 +117,11 @@ while read -r file; do
     echo "-----------------------";
 
 done < <(find "$1" -type f)
+end_datetime=$(date "+%F/%r")
 
-echo "Duplicates found:";
+printf '%s /// %s : found:  %s,   deleted:  %s\n' "$start_datetime" "$end_datetime" "${#duplicates[@]}" "$delete_files_count" >> ~/var/duper.log
+
+echo $DUPLICATES_FOUND;
 # Print het aantal duplicates
 printf '%s\n' "${duplicates[@]}"
 
