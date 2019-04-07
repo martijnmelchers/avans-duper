@@ -90,10 +90,7 @@ delete_files_count=0;
 while read -r file; do
     echo $PROGRESS_START;
 
-    # Als dit bestand in de exclusie lijst staat ga dan door.
-    if array_contains "$file" "${ignore_duplicates[@]}" ; then
-        continue
-    fi
+
 
     echo "$PROGRESS_FILE $file";
 
@@ -104,11 +101,16 @@ while read -r file; do
 
     # Check of we deze sha al zijn tegengekomen in het proces
     if array_contains "$sha" ${sha_files[@]} ; then
+        # Als dit bestand in de exclusie lijst staat ga dan door.
+        if array_contains "$file" "${ignore_duplicates[@]}" ; then
+            continue
+        fi
+        
         # We hebben een duplicate voeg dit bestandspad aan de lijst toe
         duplicates+=("$file")
          if [[ "$delete_files" = true ]]; then
             rm $file;
-            delete_files_count+=1
+            delete_files_count=$((delete_files_count + 1))
             echo $PROGRESS_DELETING;
         fi
 
