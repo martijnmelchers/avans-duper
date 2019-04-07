@@ -1,7 +1,21 @@
 #!/bin/bash
 
-# Maak een var directory als hij nog niet bestaat.
+# Door:
+# - Sascha Mendel, 2141142
+# - Martijn Melchers, 2139354
 
+# Eisen:
+# - Alleen bestanden in opgegeven start-directory (inclusief onderliggende directories) worden bekeken
+# - Duplicaten van bestanden worden correct gevonden. Je mag hiervoor geen bestaand tool gebruiken 
+# - Verplicht getopts gebruiken voor het interpreteren van opties
+# - optie -r om gevonden duplicaten direct te laten verwijderen;
+# - optie -x <naam> om een file op te geven die buiten beschouwing gelaten moet worden bij het zoeken naar duplicaten.
+# - optie -l <landcode> om een landcode in 2 letters mee te geven.
+# - het script geeft aan welke duplicaten er gevonden zijn en wat de actie was.
+# - Het script maakt een directory ~/var en voegt regels aan een log file toe (duper.log)
+# - Het script geeft foutmeldingen bij de gevallen die blackboard meld.
+
+# Maak een var directory als hij nog niet bestaat.
 mkdir -p ~/var
 
 
@@ -105,7 +119,7 @@ while read -r file; do
         if array_contains "$file" "${ignore_duplicates[@]}" ; then
             continue
         fi
-        
+
         # We hebben een duplicate voeg dit bestandspad aan de lijst toe
         duplicates+=("$file")
          if [[ "$delete_files" = true ]]; then
